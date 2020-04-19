@@ -1,12 +1,4 @@
-Title
+semantic-release-spec-md
 =============
 
-*Intro*
-
-Intro goes here
-
-
-
-# Heading goes here
-
-Words go here
+![Node.js CI](https://github.com/michaelmccord/semantic-release-spec-md/workflows/Node.js%20CI/badge.svg)
