@@ -3,7 +3,31 @@
   "version": "1.0.0",
   "description": "semantic-release plugin for execution of spec-md against spec markdown documents",
   "main": "src/index.js",
-  "repository": "https://github.com/michaelmccord/semantic-release-spec-md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michaelmccord/semantic-release-spec-md"
+  },
+  "bugs": {
+    "url": "https://github.com/michaelmccord/semantic-release-spec-md/issues"
+  },
+  "keywords": [
+    "ast",
+    "ecma",
+    "ecmascript",
+    "html",
+    "markdown",
+    "markup",
+    "spec",
+    "specs",
+    "specification",
+    "typography",
+    "code",
+    "spec-md",
+    "semantic-release",
+    "release",
+    "semver",
+    "sem-ver"
+  ],
   "author": "Michael McCord",
   "license": "MIT",
   "private": false,
@@ -16,6 +40,15 @@
   },
   "directories": {
     "lib": "src"
+  },
+  "files": [
+    "src",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=12.13.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.x",
