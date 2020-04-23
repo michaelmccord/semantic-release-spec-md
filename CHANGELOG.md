@@ -1,5 +1,17 @@
 semantic-release-spec-md Changelog
 
+# [2.0.0](https://github.com/michaelmccord/semantic-release-spec-md/compare/v1.0.1...v2.0.0) (2020-04-23)
+
+
+### Features
+
+* assume plugins require first arg to be specPath ([037a3d5](https://github.com/michaelmccord/semantic-release-spec-md/commit/037a3d5285ca7db60e8c333208a91ab3e01914d7))
+
+
+### BREAKING CHANGES
+
+* now requires that plugin supports first arg as specPath
+
 ## [1.0.1](https://github.com/michaelmccord/semantic-release-spec-md/compare/v1.0.0...v1.0.1) (2020-04-19)
 
 

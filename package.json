@@ -1,6 +1,6 @@
 {
   "name": "semantic-release-spec-md",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "semantic-release plugin for execution of spec-md against spec markdown documents",
   "main": "src/index.js",
   "repository": {
