@@ -105,7 +105,7 @@ async function prepare(pluginConfig, context) {
       const package = pluginConfig.plugin.package;
       const {args, metadata} = pluginConfig.plugin;
       const plugin = require('./get-plugin')(package);
-      output = await plugin(args, specmd.parse(specPath), metadata);
+      output = await plugin([specPath,...args], specmd.parse(specPath), metadata);
     }
   } catch(error) {
     logger.fatal('There was an error producing spec-md output');
