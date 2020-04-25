@@ -33,8 +33,10 @@
   "private": false,
   "dependencies": {
     "@semantic-release/error": "2.2.x",
+    "aggregate-error": "^3.0.1",
     "debug": "4.1.x",
     "figures": "3.2.x",
+    "lodash": "^4.17.15",
     "requireg": "0.2.x",
     "signale": "1.4.x"
   },
@@ -87,7 +89,8 @@
         }
       ],
       [
-        "@semantic-release/exec",{
+        "@semantic-release/exec",
+        {
           "verifyReleaseCmd": "jsdoc2md -f src/**.js > APIDocs.md"
         }
       ],
