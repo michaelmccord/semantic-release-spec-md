@@ -1,12 +1,12 @@
 const {Signale} = require('signale');
 const figures = require('figures');
 
-module.exports = ({stdout, stderr}) =>
+module.exports = ({stdout, stderr}, scope) =>
   new Signale({
     config: {displayTimestamp: true, underlineMessage: false, displayLabel: false},
     disabled: false,
     interactive: false,
-    scope: 'semantic-release-spec-md',
+    scope: scope ? `semantic-release-spec-md:${scope}` : 'semantic-release-spec-md',
     stream: [stdout],
     types: {
       error: {badge: figures.cross, color: 'red', label: '', stream: [stderr]},
