@@ -15,7 +15,7 @@ function verifyConditions(pluginConfig, context) {
     foundSpecMD = require('spec-md');
   } catch(error) {
     logger.warn('spec-md was not found as a local dependency, checking globally...');
-    debug(error);
+    logger.warn(error);
   }
 
   if(!foundSpecMD) {
@@ -24,7 +24,7 @@ function verifyConditions(pluginConfig, context) {
     } catch(error) {
       logger.fatal('Could not load spec-md as a local dependency or as a global install.');
       logger.fatal('Please ensure spec-md is installed.');
-      throw error;
+      throw [new SemanticReleaseError('Missing spec-md', 'E_MISSING_SPEC_MD', 'Attempted to find spec-md as a local dependency and as a global install and failed.'), error];
     }
   }
 
@@ -51,9 +51,8 @@ function verifyConditions(pluginConfig, context) {
   }
 
 
-  if(pluginConfig.plugin) {
-    if(!pluginConfig.plugin.package)
-      throw new SemanticReleaseError('Missing plugin package', 'E_MISSING_PLUGIN_PACKAGE', 'Please supply a plugin.package to load if using a plugin');
+  if(pluginConfig.specMDPlugin && !pluginConfig.specMDPlugin.package) {
+    throw new SemanticReleaseError('Missing plugin package', 'E_MISSING_PLUGIN_PACKAGE', 'Please supply a specMDPlugin.package to load if using a plugin');
   }
 
   if(!pluginConfig.outputPath)
@@ -92,7 +91,7 @@ async function prepare(pluginConfig, context) {
   const logger = getLogger(context);
   const specmd = require('./get-spec-md');
   const specPath = path.resolve(context.cwd, pluginConfig.specPath);
-  const plugin = pluginConfig.plugin;
+  const plugin = pluginConfig.specMDPlugin;
   const metadata = pluginConfig.metadata;
 
   logger.info(`Converting spec at ${specPath}`);
@@ -102,9 +101,9 @@ async function prepare(pluginConfig, context) {
     if(!plugin) {
       output = await specmd.html(specPath, metadata);
     } else {
-      const package = pluginConfig.plugin.package;
-      const {args, metadata} = pluginConfig.plugin;
-      const plugin = require('./get-plugin')(package);
+      const pluginPackage = pluginConfig.specMDPlugin.package;
+      const {args, metadata} = pluginConfig.specMDPlugin;
+      const plugin = require('./get-package')(pluginPackage);
       output = await plugin([specPath,...args], specmd.parse(specPath), metadata);
     }
   } catch(error) {
@@ -115,16 +114,28 @@ async function prepare(pluginConfig, context) {
   if(!output)
     throw new SemanticReleaseError('Empty output', 'E_MISSING_OUTPUT', 'No output was produced after execution of spec-md');
 
-
-
   logger.info(`Spec at ${specPath} converted`);
 
-}
 
-
-async function publish(pluginConfig, context) {
-  const logger = getLogger(context);
   const outputPath = pluginConfig.outputPath;
+
+  let outputPathExists = false;
+
+  try {
+    outputPathExists = fs.existsSync(outputPath);
+  } catch(error) {
+    throw [new SemanticReleaseError('Error determining output path existence', 'E_DET_OUTPUT_PATH', `There was an error determining if ${outputPath} exists`), error]
+  }
+
+  if(!outputPathExists) {
+    logger.info('Output path does not exist.');
+    logger.info('Creating output path.');
+
+    fs.mkdirSync(outputPath);
+
+    logger.info('Output path created.');
+  }
+
 
   logger.info(`Writing output to ${outputPath}`);
   try {
@@ -134,17 +145,14 @@ async function publish(pluginConfig, context) {
   }
   logger.info(`Output written to ${outputPath}`);
 
-
 }
-
 
 
 
 module.exports = {
   verifyConditions,
   verifyRelease,
-  prepare,
-  publish
+  prepare
 };
 
 

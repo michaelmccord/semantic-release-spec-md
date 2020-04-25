@@ -1,11 +1,11 @@
-module.exports = (require, requireg)=>(function(package) {
+module.exports = (require, requireg)=>(function(packageName) {
   let specmd = null;
   try {
-    specmd = require(package);
+    specmd = require(packageName);
   }catch(e) {}
 
   if(!specmd)
-    specmd = requireg(package);
+    specmd = requireg(packageName);
 
 
   return specmd;
