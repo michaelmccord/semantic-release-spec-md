@@ -53,10 +53,12 @@
   "devDependencies": {
     "@semantic-release/changelog": "5.0.x",
     "@semantic-release/commit-analyzer": "8.0.x",
+    "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "9.0.x",
     "@semantic-release/github": "7.0.x",
     "@semantic-release/release-notes-generator": "9.0.x",
     "jasmine": "3.5.x",
+    "jsdoc-to-markdown": "^5.0.3",
     "nodemon": "2.0.x",
     "semantic-release": "17.0.x",
     "semantic-release-test-utils": "https://github.com/michaelmccord/semantic-release-test-utils",
@@ -69,7 +71,9 @@
   "scripts": {
     "test": "jasmine",
     "mon-test": "nodemon --exec jasmine",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "release-dry-run": "semantic-release --dry-run=true --ci=true -b '*'",
+    "docs": "jsdoc2md -f src/**.js > APIDocs.md"
   },
   "release": {
     "plugins": [
@@ -80,6 +84,11 @@
         {
           "changelogTitle": "semantic-release-spec-md Changelog",
           "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/exec",{
+          "verifyReleaseCmd": "jsdoc2md -f src/**.js > APIDocs.md"
         }
       ],
       [
@@ -94,7 +103,8 @@
         {
           "assets": [
             "CHANGELOG.md",
-            "package.json"
+            "package.json",
+            "APIDocs.md"
           ],
           "message": "chore(release):  ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
