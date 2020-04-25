@@ -59,7 +59,8 @@
     "jasmine": "3.5.x",
     "nodemon": "2.0.x",
     "semantic-release": "17.0.x",
-    "semantic-release-test-utils": "https://github.com/michaelmccord/semantic-release-test-utils"
+    "semantic-release-test-utils": "https://github.com/michaelmccord/semantic-release-test-utils",
+    "sinon": "9.0.x"
   },
   "peerDependencies": {
     "semantic-release": "17.0.x",
