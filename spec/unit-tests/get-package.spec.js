@@ -1,6 +1,5 @@
 const getPackageFn = require('../../src/get-package');
 const sinon = require('sinon');
-const requireg = require('requireg');
 const assert = require('assert');
 
 afterEach(function(){
