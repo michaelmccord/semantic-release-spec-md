@@ -1,7 +1,11 @@
-const {isPlainObject, isArray, isString, isFunction, isObjectLike} = require('lodash');
+const { isPlainObject, isArray, isString, isFunction, isObjectLike } = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const AggregateError = require('aggregate-error');
+
+const ErrorMessages = {
+
+};
 
 /* Represents a spec-md specification */
 class SpecMDSpec {
@@ -27,34 +31,34 @@ class SpecMDSpec {
     this.#specPath = specPath;
     try {
       path.parse(specPath);
-    } catch(error) {
-      throw new AggregateError([new Error(`There was an error parsing the path ${JSON.stringify({specPath})}`), error]);
+    } catch (error) {
+      throw new AggregateError([new Error(`There was an error parsing the path ${JSON.stringify({ specPath })}`), error]);
     }
 
     let specExists = false;
     try {
-      specExists = !fs.existsSync(specPath);
-    } catch(error) {
-      throw new AggregateError([new Error(`Error determining if spec exists at ${JSON.stringify({specPath})}`), error]);
+      specExists = fs.existsSync(specPath);
+    } catch (error) {
+      throw new AggregateError([new Error(`Error determining if spec exists at ${JSON.stringify({ specPath })}`), error]);
     }
 
-    if(!specExists)
-      throw new Error(`specmd spec does not exist at ${JSON.stringify({specPath})}`);
+    if (!specExists)
+      throw new Error(`specmd spec does not exist at ${JSON.stringify({ specPath })}`);
 
 
     this.#pluginInfo = pluginInfo;
-    if(pluginInfo
-          && !isPlainObject(pluginInfo)
-          && isArray(pluginInfo.args)
-          && isString(pluginInfo.package)) {
-      throw new TypeError(`${JSON.stringify({pluginInfo})} is not the right shape!`);
+    if (pluginInfo
+      && (!isPlainObject(pluginInfo)
+        || !isArray(pluginInfo.args)
+        || !isString(pluginInfo.package))) {
+      throw new TypeError(`${JSON.stringify({ pluginInfo })} is not the right shape!`);
     }
 
-    if(pluginInfo && !isFunction(getPluginFn))
-      throw new TypeError(`${JSON.stringify({getPluginFn})} must be supplied!`);
+    if (pluginInfo && !isFunction(getPluginFn))
+      throw new TypeError(`${JSON.stringify({ getPluginFn })} must be supplied!`);
 
-    if(!isObjectLike(specmd) && !isFunction(specmd.parse) && !isFunction(specmd.html))
-      throw new TypeError(`${JSON.stringify({specmd})} is not the right shape!`);
+    if (!isObjectLike(specmd) || !isFunction(specmd.parse) || !isFunction(specmd.html))
+      throw new TypeError(`${JSON.stringify({ specmd })} is not the right shape!`);
 
     this.#metadata = metadata;
     this.#specmd = specmd;
@@ -67,40 +71,41 @@ class SpecMDSpec {
   /**
    * Parses the specmd specification that this SpecMDSpec represents
    */
-  parse = ()=>{
-    this.#astPromise = this.#specmd.parse(specPath);
+  parse() {
+    return this.#astPromise = this.#specmd.parse(this.#specPath);
   }
 
-  #htmlOutput = ()=>{
-    if(!this.#astPromise)
+  #getHtmlOutput = ()=>{
+    if (!this.#astPromise)
       this.parse();
 
     return this.#specmd.html(this.#specPath, this.#metadata);
   }
 
-  #pluginOutput = ()=>{
-    if(!this.#astPromise)
+  #getPluginOutput = ()=>{
+    if (!this.#astPromise)
       this.parse();
 
-    if(!this.pluginInfo)
-      throw new Error('Plugin information not specified');
-
-    const {args} = this.#pluginInfo;
-    return this.#plugin([this.#specPath, ...args], this.#astPromise, this.#metadata);
+    const { args } = this.#pluginInfo;
+    return this.#plugin([this.#specPath, ...args],
+      this.#astPromise,
+      this.#metadata);
   }
 
   /**
    * Processes the spec-md specification that this SpecMDSpec represents.
    * @returns {Promise} - Promise for the resulting output. Output is assumed to be a string, but this class is agnostic of that.
    */
-  output = async ()=>{
+  getOutput() {
     let output = null;
 
-    if(this.#plugin)
-      output = await this.#pluginOutput();
+    if (this.#plugin)
+      output = this.#getPluginOutput();
     else
-      output = await this.#htmlOutput();
+      output = this.#getHtmlOutput();
 
     return output;
   }
 }
+
+module.exports = SpecMDSpec;
