@@ -5,8 +5,8 @@
 
 * [SpecMDSpec](#SpecMDSpec)
     * [new SpecMDSpec(specPath, pluginInfo, metadata, getPluginFn, specmd)](#new_SpecMDSpec_new)
-    * [.parse](#SpecMDSpec+parse)
-    * [.output](#SpecMDSpec+output) ⇒ <code>Promise</code>
+    * [.parse()](#SpecMDSpec+parse)
+    * [.getOutput()](#SpecMDSpec+getOutput) ⇒ <code>Promise</code>
 
 <a name="new_SpecMDSpec_new"></a>
 
@@ -22,14 +22,14 @@
 
 <a name="SpecMDSpec+parse"></a>
 
-### specMDSpec.parse
+### specMDSpec.parse()
 Parses the specmd specification that this SpecMDSpec represents
 
-**Kind**: instance property of [<code>SpecMDSpec</code>](#SpecMDSpec)  
-<a name="SpecMDSpec+output"></a>
+**Kind**: instance method of [<code>SpecMDSpec</code>](#SpecMDSpec)  
+<a name="SpecMDSpec+getOutput"></a>
 
-### specMDSpec.output ⇒ <code>Promise</code>
+### specMDSpec.getOutput() ⇒ <code>Promise</code>
 Processes the spec-md specification that this SpecMDSpec represents.
 
-**Kind**: instance property of [<code>SpecMDSpec</code>](#SpecMDSpec)  
+**Kind**: instance method of [<code>SpecMDSpec</code>](#SpecMDSpec)  
 **Returns**: <code>Promise</code> - - Promise for the resulting output. Output is assumed to be a string, but this class is agnostic of that.  
