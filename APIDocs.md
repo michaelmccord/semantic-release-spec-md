@@ -87,7 +87,7 @@ Gets [packageName](packageName) from local dependency cache or from a global ins
 
 * [Plugin](#module_Plugin)
     * [~Plugin](#module_Plugin..Plugin)
-        * [new Plugin(getPackage, getLogger, path, fs)](#new_module_Plugin..Plugin_new)
+        * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
         * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
     * [~getPackageFn](#module_Plugin..getPackageFn) ⇒ <code>any</code>
     * [~getLoggerFn](#module_Plugin..getLoggerFn) ⇒ [<code>Signale</code>](#external_Signale)
@@ -102,12 +102,12 @@ Represents the semantic-release-spec-md plugin
 **Kind**: inner class of [<code>Plugin</code>](#module_Plugin)  
 
 * [~Plugin](#module_Plugin..Plugin)
-    * [new Plugin(getPackage, getLogger, path, fs)](#new_module_Plugin..Plugin_new)
+    * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
     * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
 
 <a name="new_module_Plugin..Plugin_new"></a>
 
-#### new Plugin(getPackage, getLogger, path, fs)
+#### new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)
 
 | Param | Type |
 | --- | --- |
@@ -117,6 +117,7 @@ Represents the semantic-release-spec-md plugin
 | path.resolve | <code>resolveFn</code> | 
 | fs | <code>Object</code> | 
 | fs.existsSync | <code>existsSyncFn</code> | 
+| SpecMDSpec | <code>function</code> | 
 
 <a name="module_Plugin..Plugin+verifyConditions"></a>
 

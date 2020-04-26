@@ -18,7 +18,8 @@ describe('Plugin', function(){
         null,
         sinon.fake(),
         {resolve: sinon.fake()},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -34,7 +35,8 @@ describe('Plugin', function(){
         {},
         sinon.fake(),
         {resolve: sinon.fake()},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -50,7 +52,8 @@ describe('Plugin', function(){
         {},
         sinon.fake(),
         {resolve: sinon.fake()},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -66,7 +69,8 @@ describe('Plugin', function(){
         sinon.fake(),
         null,
         {resolve: sinon.fake()},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -83,7 +87,8 @@ describe('Plugin', function(){
         sinon.fake(),
         null,
         {resolve: sinon.fake()},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -100,7 +105,8 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         null,
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -116,7 +122,8 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         {resolve: null},
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -133,7 +140,8 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         sinon.fake(),
-        {existsSync: sinon.fake()}
+        {existsSync: sinon.fake()},
+        sinon.fake()
       ));
 
       try {
@@ -150,7 +158,8 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         {resolve: sinon.fake()},
-        null
+        null,
+        sinon.fake()
       ));
 
       try {
@@ -167,6 +176,7 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         {resolve: sinon.fake()},
+        sinon.fake(),
         sinon.fake()
       ));
 
@@ -184,7 +194,44 @@ describe('Plugin', function(){
         sinon.fake(),
         sinon.fake(),
         {resolve: sinon.fake()},
-        {existsSync: null}
+        {existsSync: null},
+        sinon.fake()
+      ));
+
+      try {
+        theSpy();
+      } catch(error) {
+      }
+
+      assert(theSpy.threw());
+    });
+
+
+    it('throws if SpecMDSpec is null', function(){
+      const theSpy = sinon.spy(()=>new Plugin(
+        sinon.fake(),
+        sinon.fake(),
+        {resolve: sinon.fake()},
+        {existsSync: sinon.fake()},
+        null
+      ));
+
+      try {
+        theSpy();
+      } catch(error) {
+      }
+
+      assert(theSpy.threw());
+    });
+
+
+    it('throws if SpecMDSpec is not a function', function(){
+      const theSpy = sinon.spy(()=>new Plugin(
+        sinon.fake(),
+        sinon.fake(),
+        {resolve: sinon.fake()},
+        {existsSync: sinon.fake()},
+        {}
       ));
 
       try {
@@ -214,7 +261,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -248,7 +296,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -283,7 +332,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -316,7 +366,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -353,7 +404,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -396,7 +448,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -429,7 +482,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -468,7 +522,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -508,7 +563,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -548,7 +604,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -583,7 +640,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -619,7 +677,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -656,7 +715,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -698,7 +758,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -734,7 +795,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -774,7 +836,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -816,7 +879,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -860,7 +924,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -904,7 +969,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -944,7 +1010,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {
@@ -985,7 +1052,8 @@ describe('Plugin', function(){
         getPackageFake,
         getLoggerFake,
         {resolve: pathResolveFake},
-        {existsSync: fsExistsSyncFake}
+        {existsSync: fsExistsSyncFake},
+        sinon.fake()
       );
 
       const pluginConfig = {

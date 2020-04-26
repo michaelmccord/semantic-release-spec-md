@@ -90,6 +90,7 @@ class Plugin {
   #fs = null;
   #MESSAGES = MESSAGES;
   #ERRORS = ERRORS;
+  #SpecMDSpec = null;
 
   get MESSAGES() {
     return this.#MESSAGES;
@@ -107,12 +108,14 @@ class Plugin {
    * @param {resolveFn} path.resolve
    * @param {Object} fs
    * @param {existsSyncFn} fs.existsSync
+   * @param {Function} SpecMDSpec
    */
-  constructor(getPackage, getLogger, path, fs) {
+  constructor(getPackage, getLogger, path, fs, SpecMDSpec) {
     this.#getPackage = getPackage;
     this.#getLogger = getLogger;
     this.#path = path;
     this.#fs = fs;
+    this.#SpecMDSpec = SpecMDSpec;
 
     if(!getPackage || !isFunction(getPackage))
       throw new TypeError(`${JSON.stringify({getPackage})} must be a function!`);
@@ -122,6 +125,8 @@ class Plugin {
       throw new TypeError(`${JSON.stringify({path})} must be an object with a 'resolve' method!`);
     if(!fs || !isObject(fs) || !isFunction(fs.existsSync))
       throw new TypeError(`${JSON.stringify({fs})} must be an object with an 'existsSync' method!`);
+    if(!SpecMDSpec || !isFunction(SpecMDSpec))
+      throw new TypeError(`${JSON.stringify({SpecMDSpec})} must supply SpecMDSPec class to use`)
   }
 
 
@@ -173,6 +178,12 @@ class Plugin {
 
     if(!pluginConfig.outputPath || !isString(pluginConfig.outputPath) || !pluginConfig.outputPath.trim())
       throw this.ERRORS.outputPathMissing();
+  }
+
+  async verifyRelease(pluginConfig, context) {
+    const specMDSpec = new this.#SpecMDSpec(
+
+    );
   }
 }
 
