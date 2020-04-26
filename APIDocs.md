@@ -89,6 +89,7 @@ Gets [packageName](packageName) from local dependency cache or from a global ins
     * [~Plugin](#module_Plugin..Plugin)
         * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
         * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
+        * [.verifyRelease(pluginConfig, context)](#module_Plugin..Plugin+verifyRelease) ⇒ <code>Promise</code>
     * [~getPackageFn](#module_Plugin..getPackageFn) ⇒ <code>any</code>
     * [~getLoggerFn](#module_Plugin..getLoggerFn) ⇒ [<code>Signale</code>](#external_Signale)
     * [~resolveFn](#module_Plugin..resolveFn) ⇒ <code>string</code>
@@ -104,6 +105,7 @@ Represents the semantic-release-spec-md plugin
 * [~Plugin](#module_Plugin..Plugin)
     * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
     * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
+    * [.verifyRelease(pluginConfig, context)](#module_Plugin..Plugin+verifyRelease) ⇒ <code>Promise</code>
 
 <a name="new_module_Plugin..Plugin_new"></a>
 
@@ -122,7 +124,7 @@ Represents the semantic-release-spec-md plugin
 <a name="module_Plugin..Plugin+verifyConditions"></a>
 
 #### plugin.verifyConditions(pluginConfig, context)
-Fulfills the [verifyConditions](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md) release step of semantic-release plugins
+Fulfills the [verifyConditions](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md) release step of this semantic-release plugin
 
 **Kind**: instance method of [<code>Plugin</code>](#module_Plugin..Plugin)  
 
@@ -130,11 +132,36 @@ Fulfills the [verifyConditions](https://github.com/semantic-release/semantic-rel
 | --- | --- |
 | pluginConfig | <code>Object</code> | 
 | pluginConfig.specPath | <code>string</code> | 
-| pluginConfig.specMDPlugin | <code>Object</code> | 
-| pluginConfig.specMDPlugin.package | <code>string</code> | 
-| pluginConfig.specMDPlugin.args | <code>Array.&lt;string&gt;</code> | 
+| [pluginConfig.metadata] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin.package] | <code>string</code> | 
+| [pluginConfig.specMDPlugin.args] | <code>Array.&lt;string&gt;</code> | 
 | pluginConfig.outputPath | <code>string</code> | 
 | context | <code>Object</code> | 
+| context.stdout | <code>Stream</code> | 
+| context.stderr | <code>Stream</code> | 
+| context.cwd | <code>string</code> | 
+
+<a name="module_Plugin..Plugin+verifyRelease"></a>
+
+#### plugin.verifyRelease(pluginConfig, context) ⇒ <code>Promise</code>
+Fulfills the [verifyRelease](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md) release step of this semantic-release plugin
+
+**Kind**: instance method of [<code>Plugin</code>](#module_Plugin..Plugin)  
+
+| Param | Type |
+| --- | --- |
+| pluginConfig | <code>Object</code> | 
+| pluginConfig.specPath | <code>string</code> | 
+| [pluginConfig.metadata] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin.package] | <code>string</code> | 
+| [pluginConfig.specMDPlugin.args] | <code>Array.&lt;string&gt;</code> | 
+| pluginConfig.outputPath | <code>string</code> | 
+| context | <code>Object</code> | 
+| context.stdout | <code>Stream</code> | 
+| context.stderr | <code>Stream</code> | 
+| context.cwd | <code>string</code> | 
 
 <a name="module_Plugin..getPackageFn"></a>
 
@@ -182,18 +209,20 @@ Represents a spec-md specification
 **Kind**: global class  
 
 * [SpecMDSpec](#SpecMDSpec)
-    * [new SpecMDSpec(specPath, pluginInfo, metadata, getPluginFn, specmd)](#new_SpecMDSpec_new)
+    * [new SpecMDSpec(specPath, [pluginInfo], metadata, getPluginFn, specmd)](#new_SpecMDSpec_new)
     * [.parse()](#SpecMDSpec+parse)
     * [.getOutput()](#SpecMDSpec+getOutput) ⇒ <code>Promise</code>
 
 <a name="new_SpecMDSpec_new"></a>
 
-### new SpecMDSpec(specPath, pluginInfo, metadata, getPluginFn, specmd)
+### new SpecMDSpec(specPath, [pluginInfo], metadata, getPluginFn, specmd)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | specPath | <code>string</code> | The file path to the specification that this SpecMDSpec represents |
-| pluginInfo | <code>Object</code> | A pluginInfo object describing any plugins (if any) that should be used to process the spec. Supply undefined or null to process without a plugin. |
+| [pluginInfo] | <code>Object</code> | A pluginInfo object describing any plugins (if any) that should be used to process the spec. Supply undefined or null to process without a plugin. |
+| [pluginInfo.args] | <code>Array.&lt;string&gt;</code> |  |
+| [pluginInfo.package] | <code>string</code> |  |
 | metadata | <code>Object</code> | A plain javascript object holding spec-md metadata information |
 | getPluginFn | <code>function</code> | A function used to retrieve plugin packages |
 | specmd | <code>Object</code> | A reference to the specmd package (eg retrieved via require) |

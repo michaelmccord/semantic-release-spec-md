@@ -32,18 +32,28 @@ const ERRORS = Object.freeze({
                             `There was an error verifying spec existence at ${specPath}`),
                             error
                           ]),
+
   specPathDoesNotExist: (specPath)=>new SemanticReleaseError(
                           'Spec does not exist',
                           'E_MISSING_SPEC',
                           `The spec at ${specPath} does not exist`),
+
   missingPluginPackage: ()=>new SemanticReleaseError(
                           'Missing plugin package',
                           'E_MISSING_PLUGIN_PACKAGE',
                           'Please supply a specMDPlugin.package to load if using a plugin'),
+
   outputPathMissing: ()=>new SemanticReleaseError(
                           'Missing output path!',
                           'E_MISSING_OUTPUT_PATH',
-                          'Please supply an output path')
+                          'Please supply an output path'),
+
+  errorParsing: (specPath, error)=>new AggregateError([
+                            new SemanticReleaseError(
+                              'Error parsing spec',
+                              'E_SPEC_PARSE_ERROR',
+                              `There was an error parsing the spec at ${specPath}`),
+                        error])
 });
 
 /** @module */
@@ -131,14 +141,18 @@ class Plugin {
 
 
   /**
-   * Fulfills the [verifyConditions]{@link https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md} release step of semantic-release plugins
+   * Fulfills the [verifyConditions]{@link https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md} release step of this semantic-release plugin
    * @param {Object} pluginConfig
    * @param {string} pluginConfig.specPath
-   * @param {Object} pluginConfig.specMDPlugin
-   * @param {string} pluginConfig.specMDPlugin.package
-   * @param {string[]} pluginConfig.specMDPlugin.args
+   * @param {Object} [pluginConfig.metadata]
+   * @param {Object} [pluginConfig.specMDPlugin]
+   * @param {string} [pluginConfig.specMDPlugin.package]
+   * @param {string[]} [pluginConfig.specMDPlugin.args]
    * @param {string} pluginConfig.outputPath
    * @param {Object} context
+   * @param {Stream} context.stdout
+   * @param {Stream} context.stderr
+   * @param {string} context.cwd
    */
   verifyConditions(pluginConfig, context) {
     const logger = this.#getLogger(context);
@@ -180,10 +194,39 @@ class Plugin {
       throw this.ERRORS.outputPathMissing();
   }
 
+  /**
+   * Fulfills the [verifyRelease]{@link https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md} release step of this semantic-release plugin
+   * @param {Object} pluginConfig
+   * @param {string} pluginConfig.specPath
+   * @param {Object} [pluginConfig.metadata]
+   * @param {Object} [pluginConfig.specMDPlugin]
+   * @param {string} [pluginConfig.specMDPlugin.package]
+   * @param {string[]} [pluginConfig.specMDPlugin.args]
+   * @param {string} pluginConfig.outputPath
+   * @param {Object} context
+   * @param {Stream} context.stdout
+   * @param {Stream} context.stderr
+   * @param {string} context.cwd
+   * @returns {Promise}
+   */
   async verifyRelease(pluginConfig, context) {
-    const specMDSpec = new this.#SpecMDSpec(
+    const specPath = this.#path.resolve(context.cwd, pluginConfig.specPath);
+    try {
+      const specmd = this.#getPackage('spec-md');
+      const specMDSpec = new this.#SpecMDSpec(
+        specPath,
+        pluginConfig.specMDPlugin,
+        pluginConfig.metadata,
+        specmd,
+        this.#getPackage
+        );
+      await specMDSpec.parse();
+      context.nextRelease[specPath] = specMDSpec;
+    } catch(error) {
+      throw this.ERRORS.errorParsing(specPath, error);
+    }
 
-    );
+
   }
 }
 

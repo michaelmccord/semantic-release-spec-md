@@ -23,7 +23,9 @@ class SpecMDSpec {
   /**
    * @constructor
    * @param  {string} specPath - The file path to the specification that this SpecMDSpec represents
-   * @param  {Object} pluginInfo - A pluginInfo object describing any plugins (if any) that should be used to process the spec. Supply undefined or null to process without a plugin.
+   * @param  {Object} [pluginInfo] - A pluginInfo object describing any plugins (if any) that should be used to process the spec. Supply undefined or null to process without a plugin.
+   * @param  {string[]} [pluginInfo.args]
+   * @param  {string} [pluginInfo.package]
    * @param  {Object} metadata - A plain javascript object holding spec-md metadata information
    * @param  {Function} getPluginFn - A function used to retrieve plugin packages
    * @param  {Object} specmd - A reference to the specmd package (eg retrieved via require)
