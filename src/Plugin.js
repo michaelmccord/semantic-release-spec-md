@@ -125,6 +125,16 @@ class Plugin {
   }
 
 
+  /**
+   * Fulfills the [verifyConditions]{@link https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md} release step of semantic-release plugins
+   * @param {Object} pluginConfig
+   * @param {string} pluginConfig.specPath
+   * @param {Object} pluginConfig.specMDPlugin
+   * @param {string} pluginConfig.specMDPlugin.package
+   * @param {string[]} pluginConfig.specMDPlugin.args
+   * @param {string} pluginConfig.outputPath
+   * @param {Object} context
+   */
   verifyConditions(pluginConfig, context) {
     const logger = this.#getLogger(context);
 

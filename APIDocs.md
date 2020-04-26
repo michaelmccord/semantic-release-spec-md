@@ -88,6 +88,7 @@ Gets [packageName](packageName) from local dependency cache or from a global ins
 * [Plugin](#module_Plugin)
     * [~Plugin](#module_Plugin..Plugin)
         * [new Plugin(getPackage, getLogger, path, fs)](#new_module_Plugin..Plugin_new)
+        * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
     * [~getPackageFn](#module_Plugin..getPackageFn) ⇒ <code>any</code>
     * [~getLoggerFn](#module_Plugin..getLoggerFn) ⇒ [<code>Signale</code>](#external_Signale)
     * [~resolveFn](#module_Plugin..resolveFn) ⇒ <code>string</code>
@@ -99,6 +100,11 @@ Gets [packageName](packageName) from local dependency cache or from a global ins
 Represents the semantic-release-spec-md plugin
 
 **Kind**: inner class of [<code>Plugin</code>](#module_Plugin)  
+
+* [~Plugin](#module_Plugin..Plugin)
+    * [new Plugin(getPackage, getLogger, path, fs)](#new_module_Plugin..Plugin_new)
+    * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
+
 <a name="new_module_Plugin..Plugin_new"></a>
 
 #### new Plugin(getPackage, getLogger, path, fs)
@@ -111,6 +117,23 @@ Represents the semantic-release-spec-md plugin
 | path.resolve | <code>resolveFn</code> | 
 | fs | <code>Object</code> | 
 | fs.existsSync | <code>existsSyncFn</code> | 
+
+<a name="module_Plugin..Plugin+verifyConditions"></a>
+
+#### plugin.verifyConditions(pluginConfig, context)
+Fulfills the [verifyConditions](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md) release step of semantic-release plugins
+
+**Kind**: instance method of [<code>Plugin</code>](#module_Plugin..Plugin)  
+
+| Param | Type |
+| --- | --- |
+| pluginConfig | <code>Object</code> | 
+| pluginConfig.specPath | <code>string</code> | 
+| pluginConfig.specMDPlugin | <code>Object</code> | 
+| pluginConfig.specMDPlugin.package | <code>string</code> | 
+| pluginConfig.specMDPlugin.args | <code>Array.&lt;string&gt;</code> | 
+| pluginConfig.outputPath | <code>string</code> | 
+| context | <code>Object</code> | 
 
 <a name="module_Plugin..getPackageFn"></a>
 
