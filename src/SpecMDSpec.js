@@ -7,7 +7,9 @@ const ErrorMessages = {
 
 };
 
-/* Represents a spec-md specification */
+/**
+ * Represents a spec-md specification
+ */
 class SpecMDSpec {
   #specPath = null;
   #pluginInfo = null;
@@ -94,7 +96,7 @@ class SpecMDSpec {
 
   /**
    * Processes the spec-md specification that this SpecMDSpec represents.
-   * @returns {Promise} - Promise for the resulting output. Output is assumed to be a string, but this class is agnostic of that.
+   * @returns {Promise} Promise for the resulting output. Output is assumed to be a string, but this class is agnostic of that.
    */
   getOutput() {
     let output = null;
