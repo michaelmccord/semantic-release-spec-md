@@ -90,10 +90,12 @@ Gets [packageName](packageName) from local dependency cache or from a global ins
         * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
         * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
         * [.verifyRelease(pluginConfig, context)](#module_Plugin..Plugin+verifyRelease) ⇒ <code>Promise</code>
+        * [.prepare(pluginConfig, context)](#module_Plugin..Plugin+prepare) ⇒ <code>Promise</code>
     * [~getPackageFn](#module_Plugin..getPackageFn) ⇒ <code>any</code>
     * [~getLoggerFn](#module_Plugin..getLoggerFn) ⇒ [<code>Signale</code>](#external_Signale)
     * [~resolveFn](#module_Plugin..resolveFn) ⇒ <code>string</code>
     * [~existsSyncFn](#module_Plugin..existsSyncFn) ⇒ <code>boolean</code>
+    * [~mkdirSyncFn](#module_Plugin..mkdirSyncFn) : <code>function</code>
 
 <a name="module_Plugin..Plugin"></a>
 
@@ -106,6 +108,7 @@ Represents the semantic-release-spec-md plugin
     * [new Plugin(getPackage, getLogger, path, fs, SpecMDSpec)](#new_module_Plugin..Plugin_new)
     * [.verifyConditions(pluginConfig, context)](#module_Plugin..Plugin+verifyConditions)
     * [.verifyRelease(pluginConfig, context)](#module_Plugin..Plugin+verifyRelease) ⇒ <code>Promise</code>
+    * [.prepare(pluginConfig, context)](#module_Plugin..Plugin+prepare) ⇒ <code>Promise</code>
 
 <a name="new_module_Plugin..Plugin_new"></a>
 
@@ -119,6 +122,7 @@ Represents the semantic-release-spec-md plugin
 | path.resolve | <code>resolveFn</code> | 
 | fs | <code>Object</code> | 
 | fs.existsSync | <code>existsSyncFn</code> | 
+| fs.mkdirSync | <code>mkdirSyncFn</code> | 
 | SpecMDSpec | <code>function</code> | 
 
 <a name="module_Plugin..Plugin+verifyConditions"></a>
@@ -162,6 +166,29 @@ Fulfills the [verifyRelease](https://github.com/semantic-release/semantic-releas
 | context.stdout | <code>Stream</code> | 
 | context.stderr | <code>Stream</code> | 
 | context.cwd | <code>string</code> | 
+| context.nextRelease | <code>Object</code> | 
+
+<a name="module_Plugin..Plugin+prepare"></a>
+
+#### plugin.prepare(pluginConfig, context) ⇒ <code>Promise</code>
+Fulfills the [prepare](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md) release step of this semantic-release plugin
+
+**Kind**: instance method of [<code>Plugin</code>](#module_Plugin..Plugin)  
+
+| Param | Type |
+| --- | --- |
+| pluginConfig | <code>Object</code> | 
+| pluginConfig.specPath | <code>string</code> | 
+| [pluginConfig.metadata] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin] | <code>Object</code> | 
+| [pluginConfig.specMDPlugin.package] | <code>string</code> | 
+| [pluginConfig.specMDPlugin.args] | <code>Array.&lt;string&gt;</code> | 
+| pluginConfig.outputPath | <code>string</code> | 
+| context | <code>Object</code> | 
+| context.stdout | <code>Stream</code> | 
+| context.stderr | <code>Stream</code> | 
+| context.cwd | <code>string</code> | 
+| context.nextRelease | <code>Object</code> | 
 
 <a name="module_Plugin..getPackageFn"></a>
 
@@ -195,6 +222,15 @@ Fulfills the [verifyRelease](https://github.com/semantic-release/semantic-releas
 <a name="module_Plugin..existsSyncFn"></a>
 
 ### Plugin~existsSyncFn ⇒ <code>boolean</code>
+**Kind**: inner typedef of [<code>Plugin</code>](#module_Plugin)  
+
+| Param | Type |
+| --- | --- |
+| path | <code>PathLike</code> | 
+
+<a name="module_Plugin..mkdirSyncFn"></a>
+
+### Plugin~mkdirSyncFn : <code>function</code>
 **Kind**: inner typedef of [<code>Plugin</code>](#module_Plugin)  
 
 | Param | Type |

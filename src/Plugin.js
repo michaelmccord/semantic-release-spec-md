@@ -7,7 +7,16 @@ const MESSAGES = Object.freeze({
   specMDNotFound: ()=>('spec-md was not found.'),
   specMDFound: ()=>('spec-md was found, continuing...'),
   errDetSpecExistence: ()=>('Could not determine spec existence'),
-  specPathDoesNotExist: ()=>('Please verify that spec exists and that your semantic-release configuration is correct.')
+  specPathDoesNotExist: ()=>('Please verify that spec exists and that your semantic-release configuration is correct.'),
+  convertingSpec: (specPath)=>(`Converting spec at ${specPath}`),
+  specConverted: (specPath)=>(`Spec at ${specPath} converted`),
+  checkOutputPathExistence: (outputPath)=>(`Checking existence of ${outputPath}`),
+  outputPathDoesNotExist: ()=>('Output path does not exist. Creating output path.'),
+  outputPathCreated: ()=>('Output path created.'),
+  writingOutput: (outputPath)=>(`Writing output to ${outputPath}`),
+  outputWritten: (outputPath)=>(`Output written to ${outputPath}`),
+  specValid: (specPath)=>(`Spec at ${specPath} is valid.`),
+  validatingSpec: (specPath)=>(`Validating spec at ${specPath}`)
 });
 
 const ERRORS = Object.freeze({
@@ -53,6 +62,31 @@ const ERRORS = Object.freeze({
                               'Error parsing spec',
                               'E_SPEC_PARSE_ERROR',
                               `There was an error parsing the spec at ${specPath}`),
+                        error]),
+  errorProducingOutput: (error)=>new AggregateError([
+                            new SemanticReleaseError(
+                              'Error producing output',
+                              'E_OUTPUT_ERROR',
+                              'An error occurred while trying to produce output'),
+                              error
+                            ]),
+  missingOutput: ()=>new SemanticReleaseError(
+                      'Empty output',
+                      'E_MISSING_OUTPUT',
+                      'No output was produced after execution of spec-md'),
+
+  errorDetOutputPathExistence: (error, outputPath)=>new AggregateError([
+                      new SemanticReleaseError(
+                        'Error determining output path existence',
+                        'E_DET_OUTPUT_PATH',
+                        `There was an error determining if ${outputPath} exists`),
+                        error]),
+
+  outputWriteError: (error, outputPath)=>new AggregateError([
+                      new SemanticReleaseError(
+                        'Output write error',
+                        'E_OUTPUT_WRITE_ERROR',
+                        `There was an issue writing spec-md output to ${outputPath}`),
                         error])
 });
 
@@ -90,6 +124,12 @@ const ERRORS = Object.freeze({
   * @returns {boolean}
   */
 
+/**
+ * @typedef mkdirSyncFn
+ * @type {Function}
+ * @param {PathLike} path
+ */
+
  /**
   * Represents the semantic-release-spec-md plugin
   */
@@ -118,6 +158,7 @@ class Plugin {
    * @param {resolveFn} path.resolve
    * @param {Object} fs
    * @param {existsSyncFn} fs.existsSync
+   * @param {mkdirSyncFn} fs.mkdirSync
    * @param {Function} SpecMDSpec
    */
   constructor(getPackage, getLogger, path, fs, SpecMDSpec) {
@@ -207,10 +248,13 @@ class Plugin {
    * @param {Stream} context.stdout
    * @param {Stream} context.stderr
    * @param {string} context.cwd
+   * @param {Object} context.nextRelease
    * @returns {Promise}
    */
   async verifyRelease(pluginConfig, context) {
+    const logger = getLogger(context);
     const specPath = this.#path.resolve(context.cwd, pluginConfig.specPath);
+    logger.info(this.MESSAGES.validatingSpec(specPath));
     try {
       const specmd = this.#getPackage('spec-md');
       const specMDSpec = new this.#SpecMDSpec(
@@ -226,7 +270,67 @@ class Plugin {
       throw this.ERRORS.errorParsing(specPath, error);
     }
 
+    logger.info(this.MESSAGES.specValid(specPath));
+  }
 
+  /**
+   * Fulfills the [prepare]{@link https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md} release step of this semantic-release plugin
+   * @param {Object} pluginConfig
+   * @param {string} pluginConfig.specPath
+   * @param {Object} [pluginConfig.metadata]
+   * @param {Object} [pluginConfig.specMDPlugin]
+   * @param {string} [pluginConfig.specMDPlugin.package]
+   * @param {string[]} [pluginConfig.specMDPlugin.args]
+   * @param {string} pluginConfig.outputPath
+   * @param {Object} context
+   * @param {Stream} context.stdout
+   * @param {Stream} context.stderr
+   * @param {string} context.cwd
+   * @param {Object} context.nextRelease
+   * @returns {Promise}
+   */
+  async prepare(pluginConfig, context) {
+    const logger = getLogger(context);
+    const specPath = path.resolve(context.cwd, pluginConfig.specPath);
+
+    logger.info(this.MESSAGES.convertingSpec(specPath));
+    let output = null;
+    try {
+      output = await context.newRelease[specPath].getOutput();
+    } catch(error) {
+      throw this.ERRORS.errorProducingOutput(error);
+    }
+
+    if(!output)
+      throw this.ERRORS.missingOutput();
+    logger.info(this.MESSAGES.specConverted(specPath));
+
+
+    logger.info(this.MESSAGES.checkOutputPathExistence(outputPath));
+    const outputPath = pluginConfig.outputPath;
+    let outputPathExists = false;
+    try {
+      outputPathExists = this.#fs.existsSync(outputPath);
+    } catch(error) {
+      throw this.ERRORS.errorDetOutputPathExistence(error, outputPath);
+    }
+
+    if(!outputPathExists) {
+      logger.info(this.MESSAGES.outputPathDoesNotExist());
+
+      this.#fs.mkdirSync(outputPath);
+
+      logger.info(this.MESSAGES.outputPathCreated());
+    }
+
+
+    logger.info(this.MESSAGES.writingOutput(outputPath));
+    try {
+      fs.writeFileSync(outputPath, output);
+    } catch(error) {
+      throw this.ERRORS.outputWriteError(error, outputPath);
+    }
+    logger.info(this.MESSAGES.outputWritten(outputPath));
   }
 }
 
